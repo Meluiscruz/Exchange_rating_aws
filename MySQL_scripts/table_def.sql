@@ -1,0 +1,1 @@
+SHOW CREATE TABLE tipos_de_cambio.serie_sf43784_sell_opening
