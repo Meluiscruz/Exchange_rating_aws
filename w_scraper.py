@@ -1,5 +1,6 @@
 import requests
 import auth
+import mysql_ops
 import json
 import http.client
 import mimetypes
@@ -102,13 +103,21 @@ def Fixer_io( ): #Función que me permite tomar el tipo de cambio de una fuente 
 def run():
 
     list_of_banxico_dictionaries =[]
+    #LIST_OF_BANXICO_SERIES = ['SF43787'check, 'SF43784'check, 'SF43788'check, 'SF43786'check]
     for serie in LIST_OF_BANXICO_SERIES:
         list_of_banxico_dictionaries.append(Banxico_oportuno(serie))
+    mysql_ops.Banxico_Insertion_sf43787_buy_opening(list_of_banxico_dictionaries[0])
+    mysql_ops.Banxico_Insertion_sf43784_sell_opening(list_of_banxico_dictionaries[1])
+    mysql_ops.Banxico_Insertion_sf43788_buy_closing(list_of_banxico_dictionaries[2])
+    mysql_ops.Banxico_Insertion_sf43786_sell_closing(list_of_banxico_dictionaries[3])
 
     eur_dollar_from_Fixer = Fixer_io()
+    mysql_ops.EUR_USD_Insertion(eur_dollar_from_Fixer)
 
     gold_price = Metal_API_request(metal = 'XAU')
+    mysql_ops.Metal_Insertion_gold(gold_price)
     silver_price = Metal_API_request(metal = 'XAG')
+    mysql_ops.Metal_Insertion_silver(silver_price)
 
 if __name__ == "__main__":
     run()
