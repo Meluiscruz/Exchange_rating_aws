@@ -27,7 +27,7 @@ def Banxico_Insertion_sf43787_buy_opening ( dictionary ):
         print(E)
 
     finally:
-        
+        print('\nBanxico Insertion SF43787 is ok. Everything in its right place')
         connection.close()   
 
 def Banxico_Insertion_sf43784_sell_opening ( dictionary ):
@@ -52,7 +52,7 @@ def Banxico_Insertion_sf43784_sell_opening ( dictionary ):
         print(E)
 
     finally:
-        
+        print('\nBanxico Insertion SF43784 is ok. Everything in its right place')
         connection.close()
 
 def Banxico_Insertion_sf43788_buy_closing ( dictionary ):
@@ -77,7 +77,7 @@ def Banxico_Insertion_sf43788_buy_closing ( dictionary ):
         print(E)
 
     finally:
-        
+        print('\nBanxico Insertion SF43788 is ok. Everything in its right place')
         connection.close()
 
 def Banxico_Insertion_sf43786_sell_closing ( dictionary ):
@@ -102,7 +102,7 @@ def Banxico_Insertion_sf43786_sell_closing ( dictionary ):
         print(E)
 
     finally:
-        
+        print('\nBanxico Insertion SF43786 is ok. Everything in its right place')
         connection.close()
 
 def Metal_Insertion_gold ( dictionary ):
@@ -127,7 +127,7 @@ def Metal_Insertion_gold ( dictionary ):
         print(E)
 
     finally:
-        
+        print('\nGold price insertion is ok. Everything in its right place')
         connection.close()
 
 def Metal_Insertion_silver ( dictionary ):
@@ -152,7 +152,7 @@ def Metal_Insertion_silver ( dictionary ):
         print(E)
 
     finally:
-        
+        print('\nSilver price insertion is ok. Everything in its right place')
         connection.close()
 
 def EUR_USD_Insertion ( dictionary ):
@@ -169,7 +169,7 @@ def EUR_USD_Insertion ( dictionary ):
 
         with connection.cursor() as cursor: 
 
-            sql = "INSERT INTO `silver_usd_per_oz`( `ex_rate_EUR_MXN`, `ex_rate_EUR_USD`, `measure_date`, `measure_time`) VALUES ('"+ ex_rate_EUR_MXN +"','"+ ex_rate_EUR_USD +"','"+ measure_date +"', '"+ measure_time +"')"
+            sql = "INSERT INTO `eur_usd_from_fixer`(`ex_rate_EUR_MXN`, `ex_rate_EUR_USD`, `measure_date`, `measure_time`) VALUES ('"+ex_rate_EUR_MXN+"', '"+ex_rate_EUR_USD+"', '"+measure_date+"', '"+measure_time+"')"
             cursor.execute(sql)
             connection.commit()
 
@@ -178,6 +178,5 @@ def EUR_USD_Insertion ( dictionary ):
         print(E)
 
     finally:
-        
+        print('\nEUR ->MXN and EUR -> USD insertions are ok. Everything in its right place')
         connection.close()
-

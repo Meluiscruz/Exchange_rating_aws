@@ -45,7 +45,7 @@ def Metal_API_request(metal):
             if "error" in clean_dic:
                 raise ValueError(f'Error: There was an error during extraction. Maybe there is no data available for this date or pair')
             else:
-                price_in_usd = clean_dic['price']
+                price_in_usd = str(round(clean_dic['price'], 2))
                 serie = metal
                 m_date = datetime.now().strftime("%Y-%m-%d")
                 m_time = datetime.now().strftime("%H:%M:%S")
@@ -86,8 +86,8 @@ def Fixer_io( ): #Función que me permite tomar el tipo de cambio de una fuente 
 
         answer = requests.get(url)
         if answer.status_code == 200:
-            ex_rate_EUR_MXN = answer.json()['rates']['MXN']
-            ex_rate_EUR_USD = answer.json()['rates']['USD']
+            ex_rate_EUR_MXN = str(round(answer.json()['rates']['MXN'], 2))
+            ex_rate_EUR_USD = str(round(answer.json()['rates']['USD'], 2))
             m_date = datetime.now().strftime("%Y-%m-%d")
             m_time = datetime.now().strftime("%H:%M:%S")
             sleep(3)
