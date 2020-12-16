@@ -11,15 +11,6 @@ import numpy as np
 from datetime import datetime
 from time import sleep
 
-#Consulta de tipo de cambio desde FIXER IO.
-FIXER_URL_BASE = 'http://data.fixer.io/api/latest?access_key='
-DEFAULT_BASE = '&base=EUR'
-
-#Prefijos y sufijos para el acceso a la API de Banxico.
-BANXICO_PREFIX_BASE_OPORTUNO = 'https://www.banxico.org.mx/SieAPIRest/service/v1/series/'
-BANXICO_SUFIX_BASE_OPORTUNO = '/datos/oportuno?token='
-LIST_OF_BANXICO_SERIES = ['SF43787', 'SF43784', 'SF43788', 'SF43786']
-
 #Prefijos y sufijos para el acceso a la API de GoldAPI
 GOLD_API_URL_BASE = 'www.goldapi.io'
 
@@ -62,57 +53,7 @@ def Metal_API_request(metal):
     finally:
         conn.close()
 
-def Banxico_oportuno(serie):
-    url = BANXICO_PREFIX_BASE_OPORTUNO + str(serie) + BANXICO_SUFIX_BASE_OPORTUNO + auth.BANXICO_TOKEN
-    try:
-        answer = requests.get(url)
-        if answer.status_code == 200:
-            ex_rate = answer.json()['bmx']['series'][0]['datos'][0]['dato']
-            m_date = datetime.now().strftime("%Y-%m-%d")
-            m_time = datetime.now().strftime("%H:%M:%S")
-            sleep(3)
-
-            return {'serie':f'Tipo de cambio USD -> MXN {serie}', 'tipo de cambio (USD -> MXN)': ex_rate,
-                    'fecha de lectura': m_date, 'hora de lectura': m_time}
-        else:
-            raise ValueError(f'Error: {answer.status_code}')
-    except ValueError as ve:
-        print(ve)
-        #Exeption_1()
-
-def Fixer_io( ): #Función que me permite tomar el tipo de cambio de una fuente externa a Banxico.
-    url = FIXER_URL_BASE + auth.FIXER_API_KEY + DEFAULT_BASE
-    try:
-
-        answer = requests.get(url)
-        if answer.status_code == 200:
-            ex_rate_EUR_MXN = str(round(answer.json()['rates']['MXN'], 2))
-            ex_rate_EUR_USD = str(round(answer.json()['rates']['USD'], 2))
-            m_date = datetime.now().strftime("%Y-%m-%d")
-            m_time = datetime.now().strftime("%H:%M:%S")
-            sleep(3)
-
-            return {'serie': 'Tipos de cambio EUR / USD', 'tipo de cambio (EUR -> MXN)': ex_rate_EUR_MXN,
-                    'tipo de cambio (EUR -> USD)' : ex_rate_EUR_USD, 'fecha de lectura' : m_date,'hora de lectura': m_time}
-        else:
-            raise ValueError(f'Error: {answer.status_code}')
-    except ValueError as ve:
-        print(ve)
-        #Exeption_3()
-
 def run():
-
-    list_of_banxico_dictionaries =[]
-    #LIST_OF_BANXICO_SERIES = ['SF43787'check, 'SF43784'check, 'SF43788'check, 'SF43786'check]
-    for serie in LIST_OF_BANXICO_SERIES:
-        list_of_banxico_dictionaries.append(Banxico_oportuno(serie))
-    mysql_ops.Banxico_Insertion_sf43787_buy_opening(list_of_banxico_dictionaries[0])
-    mysql_ops.Banxico_Insertion_sf43784_sell_opening(list_of_banxico_dictionaries[1])
-    mysql_ops.Banxico_Insertion_sf43788_buy_closing(list_of_banxico_dictionaries[2])
-    mysql_ops.Banxico_Insertion_sf43786_sell_closing(list_of_banxico_dictionaries[3])
-
-    eur_dollar_from_Fixer = Fixer_io()
-    mysql_ops.EUR_USD_Insertion(eur_dollar_from_Fixer)
 
     gold_price = Metal_API_request(metal = 'XAU')
     mysql_ops.Metal_Insertion_gold(gold_price)
